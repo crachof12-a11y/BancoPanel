@@ -3,12 +3,17 @@ from firebase_admin import credentials, firestore, auth
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from datetime import datetime
+import os
+import json
 
 # ========= CONFIG =========
 TOKEN = "8675613049:AAGRozfMcApMqv07vcb87t80DVz61FIcxXM"
 SUPREMO_ID = 8116120039
 
-cred = credentials.Certificate("bancolombia-6064d-firebase-adminsdk-fbsvc-01630197c4.json")
+# ========= FIREBASE DESDE RENDER =========
+
+firebase_json = os.environ.get("FIREBASE_JSON")
+cred = credentials.Certificate(json.loads(firebase_json))
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -26,7 +31,6 @@ def is_seller(user_id):
 
 async def notificar_supremo(context, update, accion):
     user = update.effective_user
-
     username = f"@{user.username}" if user.username else user.first_name
 
     mensaje = f"""
