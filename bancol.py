@@ -1,21 +1,23 @@
-import firebase_admin
-from firebase_admin import credentials, firestore, auth
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from datetime import datetime
 import os
 import json
+import firebase_admin
+from firebase_admin import credentials, firestore
 
-# ========= CONFIG =========
-TOKEN = "8675613049:AAGRozfMcApMqv07vcb87t80DVz61FIcxXM"
+# ======== CONFIG =========
+TOKEN = "8675613049:AAGRozfMcApMqv07vcb87t80DVz61FIcx"
 SUPREMO_ID = 8116120039
 
-# ========= FIREBASE DESDE RENDER =========
+# ======== FIREBASE DESDE RENDER =========
+firebase_json = os.environ.get("FIREBASE_JSON")  # Leer variable de entorno
 
-firebase_json = os.environ.get("FIREBASE_JSON")
-cred = credentials.Certificate(json.loads(firebase_json))
+# Convertir string JSON a dict
+cred_dict = json.loads(firebase_json)
+
+# Inicializar Firebase
+cred = credentials.Certificate(cred_dict)
 firebase_admin.initialize_app(cred)
 
+# Cliente de Firestore
 db = firestore.client()
 
 # ========= PERMISOS =========
